@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "container:"
+      name = "CoreData">
+      <FileRef
+         location = "group:Search+CoreDataClass.swift">
+      </FileRef>
+      <FileRef
+         location = "group:Search+CoreDataProperties.swift">
+      </FileRef>
+   </Group>
+   <FileRef
+      location = "group:Dictionary3/Dictionary3/Dictionary3.xcodeproj">
+   </FileRef>
+</Workspace>
