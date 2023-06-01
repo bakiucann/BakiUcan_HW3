@@ -59,6 +59,17 @@ class DetailViewController: UIViewController {
                 }
             }
         }
+
+      viewModel.phoneticAudioURLs.bind { [weak self] audioURLs in
+          DispatchQueue.main.async {
+              if let audioURLs = audioURLs, !audioURLs.isEmpty {
+                  self?.soundButton.isHidden = false
+              } else {
+                  self?.soundButton.isHidden = true
+              }
+          }
+      }
+
         viewModel.getDetails(for: searchTerm)
         viewModel.getSynonyms(for: searchTerm)
     }
