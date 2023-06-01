@@ -18,12 +18,17 @@ class SearchManager {
     }
 
   func addSearchTerm(_ term: String) {
-      let context = appDelegate.persistentContainer.viewContext
-      let entity = NSEntityDescription.entity(forEntityName: "Search", in: context)!
-      let search = NSManagedObject(entity: entity, insertInto: context)
-      search.setValue(term, forKey: "term")
-      search.setValue(Date(), forKey: "date") // Eklenme tarihini güncelleyin.
-      appDelegate.saveContext()
+      let recentSearches = getRecentSearches()
+      if recentSearches.contains(term) {
+          print("The term '\(term)' is already exist in the recent searches.")
+      } else {
+          let context = appDelegate.persistentContainer.viewContext
+          let entity = NSEntityDescription.entity(forEntityName: "Search", in: context)!
+          let search = NSManagedObject(entity: entity, insertInto: context)
+          search.setValue(term, forKey: "term")
+          search.setValue(Date(), forKey: "date")
+          appDelegate.saveContext()
+      }
   }
 
   func getRecentSearches() -> [String] {
