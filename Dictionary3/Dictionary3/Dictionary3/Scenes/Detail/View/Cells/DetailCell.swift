@@ -70,7 +70,7 @@ class DetailCell: UITableViewCell {
       attributedString.append(numberAttributedString)
       attributedString.append(partOfSpeechAttributedString)
 
-      attributedString.append(NSAttributedString(string: "\n\n")) // İki satır arası boşluk
+      attributedString.append(NSAttributedString(string: "\n\n"))
 
       let definitionAttributes: [NSAttributedString.Key: Any] = [
           .foregroundColor: UIColor.black,
@@ -82,14 +82,14 @@ class DetailCell: UITableViewCell {
 
       if let example = definition.example {
           let exampleTitleAttributes: [NSAttributedString.Key: Any] = [
-              .foregroundColor: UIColor.black, // Example başlığının rengi
-              .font: UIFont.boldSystemFont(ofSize: 14) // Change the font as desired
+              .foregroundColor: UIColor.black,
+              .font: UIFont.boldSystemFont(ofSize: 14)
           ]
           let exampleTitleAttributedString = NSAttributedString(string: "\n\nExample  ", attributes: exampleTitleAttributes)
 
           let exampleAttributes: [NSAttributedString.Key: Any] = [
-              .foregroundColor: UIColor.gray, // Example içeriğinin rengi
-              .font: UIFont.systemFont(ofSize: 14) // Change the font as desired
+              .foregroundColor: UIColor.gray,
+              .font: UIFont.systemFont(ofSize: 14)
           ]
           let exampleAttributedString = NSAttributedString(string: "\n\n\(example)", attributes: exampleAttributes)
 

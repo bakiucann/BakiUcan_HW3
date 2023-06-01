@@ -11,6 +11,7 @@ class DetailViewController: UIViewController {
     var searchTerm: String!
     private var detailTableView: UITableView!
     private var titleLabel: UILabel!
+    private var titleLabelScrollView: UIScrollView!
     private var phoneticLabel: UILabel!
     private var soundButton: UIButton!
     private var titleLabelContainer: UIView!
@@ -80,11 +81,16 @@ class DetailViewController: UIViewController {
         titleLabelContainer.backgroundColor = .systemGray6
         self.view.addSubview(titleLabelContainer)
 
+        titleLabelScrollView = UIScrollView()
+        titleLabelScrollView.translatesAutoresizingMaskIntoConstraints = false
+        titleLabelContainer.addSubview(titleLabelScrollView)
+
         titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.textColor = .black
         titleLabel.font = UIFont.boldSystemFont(ofSize: 36)
-        titleLabelContainer.addSubview(titleLabel)
+        titleLabel.numberOfLines = 0
+        titleLabelScrollView.addSubview(titleLabel)
 
         phoneticLabel = UILabel()
         phoneticLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -224,8 +230,16 @@ class DetailViewController: UIViewController {
           titleLabelContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
           titleLabelContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-          titleLabel.topAnchor.constraint(equalTo: titleLabelContainer.topAnchor, constant: 20),
-          titleLabel.leadingAnchor.constraint(equalTo: titleLabelContainer.leadingAnchor, constant: 20),
+          titleLabelScrollView.topAnchor.constraint(equalTo: titleLabelContainer.topAnchor),
+          titleLabelScrollView.leadingAnchor.constraint(equalTo: titleLabelContainer.leadingAnchor),
+          titleLabelScrollView.trailingAnchor.constraint(equalTo: titleLabelContainer.trailingAnchor),
+          titleLabelScrollView.bottomAnchor.constraint(equalTo: titleLabelContainer.bottomAnchor),
+
+          titleLabel.topAnchor.constraint(equalTo: titleLabelScrollView.topAnchor, constant: 20),
+          titleLabel.leadingAnchor.constraint(equalTo: titleLabelScrollView.leadingAnchor, constant: 20),
+          titleLabel.trailingAnchor.constraint(equalTo: titleLabelScrollView.trailingAnchor, constant: -20),
+          titleLabel.bottomAnchor.constraint(equalTo: titleLabelScrollView.bottomAnchor, constant: -20),
+          titleLabel.widthAnchor.constraint(equalTo: titleLabelContainer.widthAnchor, constant: -40),
 
           soundButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
           soundButton.trailingAnchor.constraint(equalTo: titleLabelContainer.trailingAnchor, constant: -20),
@@ -239,7 +253,7 @@ class DetailViewController: UIViewController {
           buttonsStackView.topAnchor.constraint(equalTo: phoneticLabel.bottomAnchor, constant: 10),
           buttonsStackView.leadingAnchor.constraint(equalTo: titleLabelContainer.leadingAnchor, constant: 20),
           buttonsStackView.trailingAnchor.constraint(equalTo: titleLabelContainer.trailingAnchor, constant: -20),
-          buttonsStackView.bottomAnchor.constraint(equalTo: titleLabelContainer.bottomAnchor, constant: -20), // Fix for buttonsStackView
+          buttonsStackView.bottomAnchor.constraint(equalTo: titleLabelContainer.bottomAnchor, constant: -20),
 
           detailTableView.topAnchor.constraint(equalTo: titleLabelContainer.bottomAnchor),
           detailTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

@@ -15,7 +15,7 @@ struct DictionaryResponse: Codable {
 }
 
 struct Phonetic: Codable {
-    let text: String
+    let text: String?
     let audio: String?
     let sourceUrl: String?
 }
@@ -23,10 +23,11 @@ struct Phonetic: Codable {
 struct Meaning: Codable {
     let partOfSpeech: String
     let definitions: [Definition]
-
 }
 
 struct Definition: Codable {
     let definition: String
     let example: String?
 }
+
+
