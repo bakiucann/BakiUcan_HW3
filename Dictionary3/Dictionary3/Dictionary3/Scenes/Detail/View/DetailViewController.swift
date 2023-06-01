@@ -138,6 +138,7 @@ class DetailViewController: UIViewController {
 
         detailTableView = UITableView()
         detailTableView.translatesAutoresizingMaskIntoConstraints = false
+        detailTableView.separatorStyle = .none
         detailTableView.dataSource = self
         detailTableView.register(DetailCell.self, forCellReuseIdentifier: DetailCell.reuseIdentifier)
         self.view.addSubview(detailTableView)

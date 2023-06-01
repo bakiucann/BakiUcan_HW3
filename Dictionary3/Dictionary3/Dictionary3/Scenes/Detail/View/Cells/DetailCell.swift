@@ -37,6 +37,7 @@ class DetailCell: UITableViewCell {
         stackView.addArrangedSubview(definitionLabel)
 
         setupConstraints()
+        selectionStyle = .none
     }
 
     required init?(coder: NSCoder) {

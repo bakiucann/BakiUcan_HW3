@@ -45,6 +45,8 @@ class SynonymCell: UITableViewCell {
     }
 
     func configure(with synonyms: [String]) {
+        titleLabel.isHidden = synonyms.isEmpty
+
         for arrangedSubview in synonymsStackView.arrangedSubviews {
             synonymsStackView.removeArrangedSubview(arrangedSubview)
             arrangedSubview.removeFromSuperview()
