@@ -1,7 +1,7 @@
-//  DetailViewController.swift
-//  Dictionary3
+// DetailViewController.swift
+// Dictionary3
 //
-//  Created by Baki Uçan on 26.05.2023.
+// Created by Baki Uçan on 26.05.2023.
 //
 
 import UIKit
@@ -11,7 +11,6 @@ class DetailViewController: UIViewController {
     var searchTerm: String!
     private var detailTableView: UITableView!
     private var titleLabel: UILabel!
-    private var titleLabelScrollView: UIScrollView!
     private var phoneticLabel: UILabel!
     private var soundButton: UIButton!
     private var titleLabelContainer: UIView!
@@ -19,8 +18,10 @@ class DetailViewController: UIViewController {
     private var synonyms: [String] = []
     private var meanings: [Meaning] = []
     private var buttonsStackView: UIStackView!
-    private var clearFilterButton: UIButton!
     private var player: AVPlayer?
+    private var buttonsScrollView: UIScrollView!
+    private var clearButton: UIButton!
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,18 +62,37 @@ class DetailViewController: UIViewController {
             }
         }
 
-      viewModel.phoneticAudioURLs.bind { [weak self] audioURLs in
-          DispatchQueue.main.async {
-              if let audioURLs = audioURLs, !audioURLs.isEmpty {
-                  self?.soundButton.isHidden = false
-              } else {
-                  self?.soundButton.isHidden = true
-              }
-          }
-      }
+        viewModel.phoneticAudioURLs.bind { [weak self] audioURLs in
+            DispatchQueue.main.async {
+                if let audioURLs = audioURLs, !audioURLs.isEmpty {
+                    self?.soundButton.isHidden = false
+                } else {
+                    self?.soundButton.isHidden = true
+                }
+            }
+        }
+
+        viewModel.meanings.bind { [weak self] meanings in
+            DispatchQueue.main.async {
+                self?.meanings = meanings ?? []
+                self?.buttonsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+                var uniquePartOfSpeeches = Set<String>()
+                for meaning in self?.meanings ?? [] {
+                    uniquePartOfSpeeches.insert(meaning.partOfSpeech)
+                }
+                for partOfSpeech in uniquePartOfSpeeches {
+                    let button = self?.createButton(withTitle: partOfSpeech)
+                    button?.addTarget(self, action: #selector(self?.partOfSpeechButtonTapped(_:)), for: .touchUpInside)
+                    self?.buttonsStackView.addArrangedSubview(button!)
+                }
+                self?.detailTableView.reloadData()
+            }
+        }
 
         viewModel.getDetails(for: searchTerm)
         viewModel.getSynonyms(for: searchTerm)
+        clearButton.isHidden = true
+
     }
 
     private func setupViews() {
@@ -81,16 +101,11 @@ class DetailViewController: UIViewController {
         titleLabelContainer.backgroundColor = .systemGray6
         self.view.addSubview(titleLabelContainer)
 
-        titleLabelScrollView = UIScrollView()
-        titleLabelScrollView.translatesAutoresizingMaskIntoConstraints = false
-        titleLabelContainer.addSubview(titleLabelScrollView)
-
         titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.textColor = .black
         titleLabel.font = UIFont.boldSystemFont(ofSize: 36)
-        titleLabel.numberOfLines = 0
-        titleLabelScrollView.addSubview(titleLabel)
+        titleLabelContainer.addSubview(titleLabel)
 
         phoneticLabel = UILabel()
         phoneticLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -103,36 +118,23 @@ class DetailViewController: UIViewController {
         soundButton.addTarget(self, action: #selector(soundButtonTapped), for: .touchUpInside)
         titleLabelContainer.addSubview(soundButton)
 
+        buttonsScrollView = UIScrollView()
+        buttonsScrollView.translatesAutoresizingMaskIntoConstraints = false
+        titleLabelContainer.addSubview(buttonsScrollView)
+
         buttonsStackView = UIStackView()
         buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
         buttonsStackView.axis = .horizontal
-        buttonsStackView.distribution = .fillEqually
+        buttonsStackView.distribution = .fillProportionally
         buttonsStackView.spacing = 10
-        titleLabelContainer.addSubview(buttonsStackView)
+        buttonsScrollView.addSubview(buttonsStackView)
 
-        clearFilterButton = UIButton()
-        clearFilterButton.translatesAutoresizingMaskIntoConstraints = false
-        clearFilterButton.setTitle("X", for: .normal)
-        clearFilterButton.setTitleColor(.black, for: .normal)
-        clearFilterButton.layer.cornerRadius = 18
-        clearFilterButton.layer.borderWidth = 1.0
-        clearFilterButton.layer.borderColor = UIColor.clear.cgColor
-        clearFilterButton.backgroundColor = .white
-        clearFilterButton.isHidden = true
-        clearFilterButton.addTarget(self, action: #selector(clearFilterTapped), for: .touchUpInside)
-        buttonsStackView.insertArrangedSubview(clearFilterButton, at: 0)
-
-        let nounButton = createButton(withTitle: "Noun")
-        nounButton.addTarget(self, action: #selector(nounButtonTapped), for: .touchUpInside)
-        buttonsStackView.addArrangedSubview(nounButton)
-
-        let verbButton = createButton(withTitle: "Verb")
-        verbButton.addTarget(self, action: #selector(verbButtonTapped), for: .touchUpInside)
-        buttonsStackView.addArrangedSubview(verbButton)
-
-        let adjectiveButton = createButton(withTitle: "Adjective")
-        adjectiveButton.addTarget(self, action: #selector(adjectiveButtonTapped), for: .touchUpInside)
-        buttonsStackView.addArrangedSubview(adjectiveButton)
+        clearButton = UIButton()
+        clearButton.translatesAutoresizingMaskIntoConstraints = false
+        clearButton.setImage(UIImage(named: "xbutton"), for: .normal)
+        clearButton.tintColor = .black
+        clearButton.addTarget(self, action: #selector(clearButtonTapped), for: .touchUpInside)
+        titleLabelContainer.addSubview(clearButton)
 
         detailTableView = UITableView()
         detailTableView.translatesAutoresizingMaskIntoConstraints = false
@@ -143,55 +145,32 @@ class DetailViewController: UIViewController {
 
     private func createButton(withTitle title: String) -> UIButton {
         let button = UIButton()
-        button.setTitle(title, for: .normal)
+        let formattedTitle = title.prefix(1).capitalized + title.dropFirst()
+        button.setTitle(formattedTitle, for: .normal)
         button.setTitleColor(.black, for: .normal)
-        button.layer.cornerRadius = 18
-        button.layer.borderWidth = 1.0
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        button.layer.cornerRadius = 15
+        button.layer.borderWidth = 0.5
         button.layer.borderColor = UIColor.clear.cgColor
         button.backgroundColor = .white
+        button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)
         return button
     }
 
-    @objc func clearFilterTapped(button: UIButton) {
+
+    @objc func partOfSpeechButtonTapped(_ button: UIButton) {
         resetButtonSelection()
-        clearFilterButton.isHidden = true
+        button.isSelected = !button.isSelected
+        button.layer.borderColor = button.isSelected ? UIColor.systemIndigo.cgColor : UIColor.clear.cgColor
+        viewModel.isFiltering = button.isSelected
+        filterMeanings(by: button.titleLabel?.text?.lowercased() ?? "")
+        clearButton.isHidden = false
 
-        viewModel.meanings.bind { [weak self] meanings in
-            DispatchQueue.main.async {
-                self?.meanings = meanings ?? []
-                self?.detailTableView.reloadData()
-            }
-        }
-
-        detailTableView.reloadData()
     }
+
 
     @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)
-    }
-
-    @objc func nounButtonTapped(button: UIButton) {
-        resetButtonSelection()
-        button.isSelected = !button.isSelected
-        button.layer.borderColor = button.isSelected ? UIColor.systemIndigo.cgColor : UIColor.clear.cgColor
-        clearFilterButton.isHidden = !button.isSelected
-        filterMeanings(by: "noun")
-    }
-
-    @objc func verbButtonTapped(button: UIButton) {
-        resetButtonSelection()
-        button.isSelected = !button.isSelected
-        button.layer.borderColor = button.isSelected ? UIColor.systemIndigo.cgColor : UIColor.clear.cgColor
-        clearFilterButton.isHidden = !button.isSelected
-        filterMeanings(by: "verb")
-    }
-
-    @objc func adjectiveButtonTapped(button: UIButton) {
-        resetButtonSelection()
-        button.isSelected = !button.isSelected
-        button.layer.borderColor = button.isSelected ? UIColor.systemIndigo.cgColor : UIColor.clear.cgColor
-        clearFilterButton.isHidden = !button.isSelected
-        filterMeanings(by: "adjective")
     }
 
     @objc func soundButtonTapped() {
@@ -205,14 +184,27 @@ class DetailViewController: UIViewController {
         player?.play()
     }
 
+    @objc func clearButtonTapped() {
+        resetButtonSelection()
+        viewModel.isFiltering = false
+        viewModel.getDetails(for: searchTerm)
+        clearButton.isHidden = true
+    }
+
+
     private func filterMeanings(by partOfSpeech: String) {
         viewModel.meanings.bind { [weak self] meanings in
             DispatchQueue.main.async {
-                self?.meanings = meanings?.filter { $0.partOfSpeech.lowercased() == partOfSpeech } ?? []
+                if self?.viewModel.isFiltering == true {
+                    self?.meanings = meanings?.filter { $0.partOfSpeech.lowercased() == partOfSpeech } ?? []
+                } else {
+                    self?.meanings = meanings ?? []
+                }
                 self?.detailTableView.reloadData()
             }
         }
     }
+
 
     private func resetButtonSelection() {
         buttonsStackView.arrangedSubviews.forEach { (view) in
@@ -221,51 +213,47 @@ class DetailViewController: UIViewController {
                 button.layer.borderColor = UIColor.clear.cgColor
             }
         }
-        clearFilterButton.isHidden = true
     }
 
-  private func layoutViews() {
-      NSLayoutConstraint.activate([
-          titleLabelContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-          titleLabelContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-          titleLabelContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+    private func layoutViews() {
+        NSLayoutConstraint.activate([
+            titleLabelContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            titleLabelContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            titleLabelContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-          titleLabelScrollView.topAnchor.constraint(equalTo: titleLabelContainer.topAnchor),
-          titleLabelScrollView.leadingAnchor.constraint(equalTo: titleLabelContainer.leadingAnchor),
-          titleLabelScrollView.trailingAnchor.constraint(equalTo: titleLabelContainer.trailingAnchor),
-          titleLabelScrollView.bottomAnchor.constraint(equalTo: titleLabelContainer.bottomAnchor),
+            titleLabel.topAnchor.constraint(equalTo: titleLabelContainer.topAnchor, constant: 20),
+            titleLabel.leadingAnchor.constraint(equalTo: titleLabelContainer.leadingAnchor, constant: 20),
 
-          titleLabel.topAnchor.constraint(equalTo: titleLabelScrollView.topAnchor, constant: 20),
-          titleLabel.leadingAnchor.constraint(equalTo: titleLabelScrollView.leadingAnchor, constant: 20),
-          titleLabel.trailingAnchor.constraint(equalTo: titleLabelScrollView.trailingAnchor, constant: -20),
-          titleLabel.bottomAnchor.constraint(equalTo: titleLabelScrollView.bottomAnchor, constant: -20),
-          titleLabel.widthAnchor.constraint(equalTo: titleLabelContainer.widthAnchor, constant: -40),
+            soundButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+            soundButton.trailingAnchor.constraint(equalTo: titleLabelContainer.trailingAnchor, constant: -20),
+            soundButton.widthAnchor.constraint(equalToConstant: 100),
+            soundButton.heightAnchor.constraint(equalToConstant: 100),
 
-          soundButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
-          soundButton.trailingAnchor.constraint(equalTo: titleLabelContainer.trailingAnchor, constant: -20),
-          soundButton.widthAnchor.constraint(equalToConstant: 100),
-          soundButton.heightAnchor.constraint(equalToConstant: 100),
+            phoneticLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
+            phoneticLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            phoneticLabel.trailingAnchor.constraint(equalTo: titleLabelContainer.trailingAnchor),
 
-          phoneticLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
-          phoneticLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-          phoneticLabel.trailingAnchor.constraint(equalTo: titleLabelContainer.trailingAnchor),
+            clearButton.centerYAnchor.constraint(equalTo: buttonsScrollView.centerYAnchor),
+            clearButton.leadingAnchor.constraint(equalTo: titleLabelContainer.leadingAnchor, constant: 20),
+            clearButton.widthAnchor.constraint(equalToConstant: 24),
+            clearButton.heightAnchor.constraint(equalToConstant: 24),
 
-          buttonsStackView.topAnchor.constraint(equalTo: phoneticLabel.bottomAnchor, constant: 10),
-          buttonsStackView.leadingAnchor.constraint(equalTo: titleLabelContainer.leadingAnchor, constant: 20),
-          buttonsStackView.trailingAnchor.constraint(equalTo: titleLabelContainer.trailingAnchor, constant: -20),
-          buttonsStackView.bottomAnchor.constraint(equalTo: titleLabelContainer.bottomAnchor, constant: -20),
+            buttonsScrollView.topAnchor.constraint(equalTo: phoneticLabel.bottomAnchor, constant: 10),
+            buttonsScrollView.leadingAnchor.constraint(equalTo: clearButton.trailingAnchor, constant: 10),
+            buttonsScrollView.trailingAnchor.constraint(equalTo: titleLabelContainer.trailingAnchor, constant: -20),
+            buttonsScrollView.bottomAnchor.constraint(equalTo: titleLabelContainer.bottomAnchor, constant: -20),
 
-          detailTableView.topAnchor.constraint(equalTo: titleLabelContainer.bottomAnchor),
-          detailTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-          detailTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-          detailTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-      ])
-  }
+            buttonsStackView.topAnchor.constraint(equalTo: buttonsScrollView.topAnchor),
+            buttonsStackView.leadingAnchor.constraint(equalTo: buttonsScrollView.leadingAnchor),
+            buttonsStackView.trailingAnchor.constraint(equalTo: buttonsScrollView.trailingAnchor),
+            buttonsStackView.bottomAnchor.constraint(equalTo: buttonsScrollView.bottomAnchor),
+            buttonsStackView.heightAnchor.constraint(equalTo: buttonsScrollView.heightAnchor),
 
-    private func showErrorMessage(_ message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        present(alert, animated: true, completion: nil)
+            detailTableView.topAnchor.constraint(equalTo: titleLabelContainer.bottomAnchor),
+            detailTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            detailTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            detailTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 }
 

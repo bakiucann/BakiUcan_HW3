@@ -109,7 +109,6 @@ class SearchViewController: UIViewController {
       if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
           let keyboardRectangle = keyboardFrame.cgRectValue
           let keyboardHeight = keyboardRectangle.height
-          // Move Search Button right above the keyboard
           searchButtonBottomConstraint.constant = -keyboardHeight
           UIView.animate(withDuration: 0.25) {
               self.view.layoutIfNeeded()
@@ -118,7 +117,6 @@ class SearchViewController: UIViewController {
   }
 
   @objc private func keyboardWillHide(notification: NSNotification) {
-      // Move Search Button back to bottom when keyboard disappears
       searchButtonBottomConstraint.constant = 0
       UIView.animate(withDuration: 0.25) {
           self.view.layoutIfNeeded()
@@ -128,7 +126,6 @@ class SearchViewController: UIViewController {
 
   @objc func handleScreenTap(sender: UITapGestureRecognizer) {
       if sender.state == .ended {
-          // end editing and therefore resign first responder for text field
           view.endEditing(true)
       }
       sender.cancelsTouchesInView = false

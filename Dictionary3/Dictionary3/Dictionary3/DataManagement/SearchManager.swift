@@ -34,7 +34,7 @@ class SearchManager {
   func getRecentSearches() -> [String] {
       let context = appDelegate.persistentContainer.viewContext
       let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Search")
-      fetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)] // "date" özelliğine göre sıralayın.
+      fetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
       fetchRequest.fetchLimit = 5
       do {
           let result = try context.fetch(fetchRequest) as! [NSManagedObject]

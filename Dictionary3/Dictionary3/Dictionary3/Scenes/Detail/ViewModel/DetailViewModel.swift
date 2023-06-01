@@ -14,6 +14,7 @@ class DetailViewModel {
     var phoneticText: Observable<String?> = Observable()
     var synonyms: Observable<[String]> = Observable()
     var phoneticAudioURLs: Observable<[String]> = Observable()
+    var isFiltering = false
 
 
     init(apiService: APIService = APIService()) {
