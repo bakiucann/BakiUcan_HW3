@@ -28,6 +28,7 @@
 		2D0560C62A214D0C0006E3F8 /* SynonymResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0560C52A214D0C0006E3F8 /* SynonymResponse.swift */; };
 		2D0560D52A2197E90006E3F8 /* SynonymCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0560D42A2197E90006E3F8 /* SynonymCell.swift */; };
 		2D0560D72A222D9C0006E3F8 /* AlertView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0560D62A222D9C0006E3F8 /* AlertView+Extensions.swift */; };
+		2D59DAAB2A281EFE0044948C /* ErrorHandling in Frameworks */ = {isa = PBXBuildFile; productRef = 2D59DAAA2A281EFE0044948C /* ErrorHandling */; };
 		2D85B8E22A258B0E003788E0 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D85B8E12A258B0E003788E0 /* Observable.swift */; };
 		2D85B8E42A2634BB003788E0 /* SearchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D85B8E32A2634BB003788E0 /* SearchManager.swift */; };
 		2DD31E552A236C6F000504E1 /* DetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD31E542A236C6F000504E1 /* DetailCell.swift */; };
@@ -51,7 +52,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2D0229752A28083300108E1A /* KeyboardMonitor */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = KeyboardMonitor; path = Modules/KeyboardMonitor; sourceTree = "<group>"; };
+		2D0229752A28083300108E1A /* KeyboardMonitor */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = KeyboardMonitor; sourceTree = "<group>"; };
 		2D05607F2A211EA70006E3F8 /* Dictionary3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dictionary3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D0560822A211EA70006E3F8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2D0560842A211EA70006E3F8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -73,6 +74,7 @@
 		2D0560C52A214D0C0006E3F8 /* SynonymResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynonymResponse.swift; sourceTree = "<group>"; };
 		2D0560D42A2197E90006E3F8 /* SynonymCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynonymCell.swift; sourceTree = "<group>"; };
 		2D0560D62A222D9C0006E3F8 /* AlertView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlertView+Extensions.swift"; sourceTree = "<group>"; };
+		2D59DAA92A281EEE0044948C /* ErrorHandling */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ErrorHandling; sourceTree = "<group>"; };
 		2D85B8E12A258B0E003788E0 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		2D85B8E32A2634BB003788E0 /* SearchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchManager.swift; sourceTree = "<group>"; };
 		2DD31E542A236C6F000504E1 /* DetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCell.swift; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D59DAAB2A281EFE0044948C /* ErrorHandling in Frameworks */,
 				2D0229732A2804CF00108E1A /* KeyboardMonitor in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -114,6 +117,8 @@
 		2D0229742A28081A00108E1A /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				2D59DAA92A281EEE0044948C /* ErrorHandling */,
+				2D0229752A28083300108E1A /* KeyboardMonitor */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -121,7 +126,6 @@
 		2D0560762A211EA70006E3F8 = {
 			isa = PBXGroup;
 			children = (
-				2D0229752A28083300108E1A /* KeyboardMonitor */,
 				2D0229742A28081A00108E1A /* Modules */,
 				2D0560812A211EA70006E3F8 /* Dictionary3 */,
 				2D05609B2A211EAA0006E3F8 /* Dictionary3Tests */,
@@ -313,6 +317,7 @@
 			name = Dictionary3;
 			packageProductDependencies = (
 				2D0229722A2804CF00108E1A /* KeyboardMonitor */,
+				2D59DAAA2A281EFE0044948C /* ErrorHandling */,
 			);
 			productName = Dictionary3;
 			productReference = 2D05607F2A211EA70006E3F8 /* Dictionary3.app */;
@@ -782,6 +787,10 @@
 		2D0229722A2804CF00108E1A /* KeyboardMonitor */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = KeyboardMonitor;
+		};
+		2D59DAAA2A281EFE0044948C /* ErrorHandling */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ErrorHandling;
 		};
 /* End XCSwiftPackageProductDependency section */
 
