@@ -29,9 +29,9 @@
 		2D0560D52A2197E90006E3F8 /* SynonymCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0560D42A2197E90006E3F8 /* SynonymCell.swift */; };
 		2D0560D72A222D9C0006E3F8 /* AlertView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0560D62A222D9C0006E3F8 /* AlertView+Extensions.swift */; };
 		2D59DAAB2A281EFE0044948C /* ErrorHandling in Frameworks */ = {isa = PBXBuildFile; productRef = 2D59DAAA2A281EFE0044948C /* ErrorHandling */; };
-		2D85B8E22A258B0E003788E0 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D85B8E12A258B0E003788E0 /* Observable.swift */; };
 		2D85B8E42A2634BB003788E0 /* SearchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D85B8E32A2634BB003788E0 /* SearchManager.swift */; };
 		2DD31E552A236C6F000504E1 /* DetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD31E542A236C6F000504E1 /* DetailCell.swift */; };
+		2DE885CB2A28CC24000D5101 /* ObservablePackage in Frameworks */ = {isa = PBXBuildFile; productRef = 2DE885CA2A28CC24000D5101 /* ObservablePackage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,9 +75,9 @@
 		2D0560D42A2197E90006E3F8 /* SynonymCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynonymCell.swift; sourceTree = "<group>"; };
 		2D0560D62A222D9C0006E3F8 /* AlertView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlertView+Extensions.swift"; sourceTree = "<group>"; };
 		2D59DAA92A281EEE0044948C /* ErrorHandling */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ErrorHandling; sourceTree = "<group>"; };
-		2D85B8E12A258B0E003788E0 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		2D85B8E32A2634BB003788E0 /* SearchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchManager.swift; sourceTree = "<group>"; };
 		2DD31E542A236C6F000504E1 /* DetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCell.swift; sourceTree = "<group>"; };
+		2DE885C92A28CBCA000D5101 /* ObservablePackage */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ObservablePackage; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +86,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D59DAAB2A281EFE0044948C /* ErrorHandling in Frameworks */,
+				2DE885CB2A28CC24000D5101 /* ObservablePackage in Frameworks */,
 				2D0229732A2804CF00108E1A /* KeyboardMonitor in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -117,6 +118,7 @@
 		2D0229742A28081A00108E1A /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				2DE885C92A28CBCA000D5101 /* ObservablePackage */,
 				2D59DAA92A281EEE0044948C /* ErrorHandling */,
 				2D0229752A28083300108E1A /* KeyboardMonitor */,
 			);
@@ -239,9 +241,8 @@
 		2D0560CE2A214D9E0006E3F8 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				2DE885C52A282058000D5101 /* Cells */,
 				2D0560BB2A212BBA0006E3F8 /* DetailViewController.swift */,
-				2D0560D42A2197E90006E3F8 /* SynonymCell.swift */,
-				2DD31E542A236C6F000504E1 /* DetailCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -249,7 +250,6 @@
 		2D0560CF2A214DA40006E3F8 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				2D85B8E12A258B0E003788E0 /* Observable.swift */,
 				2D0560BD2A212C370006E3F8 /* DetailViewModel.swift */,
 			);
 			path = ViewModel;
@@ -299,6 +299,15 @@
 			path = LaunchScreen;
 			sourceTree = "<group>";
 		};
+		2DE885C52A282058000D5101 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				2DD31E542A236C6F000504E1 /* DetailCell.swift */,
+				2D0560D42A2197E90006E3F8 /* SynonymCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -318,6 +327,7 @@
 			packageProductDependencies = (
 				2D0229722A2804CF00108E1A /* KeyboardMonitor */,
 				2D59DAAA2A281EFE0044948C /* ErrorHandling */,
+				2DE885CA2A28CC24000D5101 /* ObservablePackage */,
 			);
 			productName = Dictionary3;
 			productReference = 2D05607F2A211EA70006E3F8 /* Dictionary3.app */;
@@ -446,7 +456,6 @@
 				2D0560D72A222D9C0006E3F8 /* AlertView+Extensions.swift in Sources */,
 				2D0560C22A212CCC0006E3F8 /* APIService.swift in Sources */,
 				2D0560C02A212C420006E3F8 /* SearchViewModel.swift in Sources */,
-				2D85B8E22A258B0E003788E0 /* Observable.swift in Sources */,
 				2D0560BC2A212BBA0006E3F8 /* DetailViewController.swift in Sources */,
 				2D85B8E42A2634BB003788E0 /* SearchManager.swift in Sources */,
 				2D0560BE2A212C370006E3F8 /* DetailViewModel.swift in Sources */,
@@ -791,6 +800,10 @@
 		2D59DAAA2A281EFE0044948C /* ErrorHandling */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ErrorHandling;
+		};
+		2DE885CA2A28CC24000D5101 /* ObservablePackage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ObservablePackage;
 		};
 /* End XCSwiftPackageProductDependency section */
 
