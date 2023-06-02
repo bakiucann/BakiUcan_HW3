@@ -63,9 +63,6 @@ The Detail page offers comprehensive information about a selected word, includin
 ### Error Handling Page
 The Error Handling page manages errors during the app's operation, providing appropriate error messages and suggestions to users, enabling them to take necessary actions or retry operations.
 
-### About Page
-The About page provides information about the app's purpose, its creators, acknowledgments, credits, version information, and links to additional resources.
-
 ## Contributing
 Contributions to the project are always appreciated. Here are some ways to contribute:
 
