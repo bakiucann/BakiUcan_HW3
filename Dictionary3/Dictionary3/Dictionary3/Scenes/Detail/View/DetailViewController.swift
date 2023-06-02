@@ -21,6 +21,7 @@ class DetailViewController: UIViewController {
     private var player: AVPlayer?
     private var buttonsScrollView: UIScrollView!
     private var clearButton: UIButton!
+    private var selectedPartsOfSpeech: Set<String> = []
 
 
     override func viewDidLoad() {
@@ -105,6 +106,7 @@ class DetailViewController: UIViewController {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.textColor = .black
         titleLabel.font = UIFont.boldSystemFont(ofSize: 36)
+        titleLabel.numberOfLines = 0
         titleLabelContainer.addSubview(titleLabel)
 
         phoneticLabel = UILabel()
@@ -159,15 +161,21 @@ class DetailViewController: UIViewController {
     }
 
 
-    @objc func partOfSpeechButtonTapped(_ button: UIButton) {
-        resetButtonSelection()
-        button.isSelected = !button.isSelected
-        button.layer.borderColor = button.isSelected ? UIColor.systemIndigo.cgColor : UIColor.clear.cgColor
-        viewModel.isFiltering = button.isSelected
-        filterMeanings(by: button.titleLabel?.text?.lowercased() ?? "")
-        clearButton.isHidden = false
-
-    }
+  @objc func partOfSpeechButtonTapped(_ button: UIButton) {
+      let partOfSpeech = button.titleLabel?.text?.lowercased() ?? ""
+      if selectedPartsOfSpeech.contains(partOfSpeech) {
+          selectedPartsOfSpeech.remove(partOfSpeech)
+          button.isSelected = false
+          button.layer.borderColor = UIColor.clear.cgColor
+      } else {
+          selectedPartsOfSpeech.insert(partOfSpeech)
+          button.isSelected = true
+          button.layer.borderColor = UIColor.systemIndigo.cgColor
+      }
+      viewModel.isFiltering = !selectedPartsOfSpeech.isEmpty
+      filterMeanings()
+      clearButton.isHidden = selectedPartsOfSpeech.isEmpty
+  }
 
 
     @objc func backButtonTapped() {
@@ -185,26 +193,27 @@ class DetailViewController: UIViewController {
         player?.play()
     }
 
-    @objc func clearButtonTapped() {
-        resetButtonSelection()
-        viewModel.isFiltering = false
-        viewModel.getDetails(for: searchTerm)
-        clearButton.isHidden = true
-    }
+  @objc func clearButtonTapped() {
+      selectedPartsOfSpeech.removeAll()
+      resetButtonSelection()
+      viewModel.isFiltering = false
+      viewModel.getDetails(for: searchTerm)
+      clearButton.isHidden = true
+  }
 
 
-    private func filterMeanings(by partOfSpeech: String) {
-        viewModel.meanings.bind { [weak self] meanings in
-            DispatchQueue.main.async {
-                if self?.viewModel.isFiltering == true {
-                    self?.meanings = meanings?.filter { $0.partOfSpeech.lowercased() == partOfSpeech } ?? []
-                } else {
-                    self?.meanings = meanings ?? []
-                }
-                self?.detailTableView.reloadData()
-            }
-        }
-    }
+  private func filterMeanings() {
+      viewModel.meanings.bind { [weak self] meanings in
+          DispatchQueue.main.async {
+              if self?.viewModel.isFiltering == true {
+                  self?.meanings = meanings?.filter { self?.selectedPartsOfSpeech.contains($0.partOfSpeech.lowercased()) ?? false } ?? []
+              } else {
+                  self?.meanings = meanings ?? []
+              }
+              self?.detailTableView.reloadData()
+          }
+      }
+  }
 
 
     private func resetButtonSelection() {
@@ -224,6 +233,7 @@ class DetailViewController: UIViewController {
 
             titleLabel.topAnchor.constraint(equalTo: titleLabelContainer.topAnchor, constant: 20),
             titleLabel.leadingAnchor.constraint(equalTo: titleLabelContainer.leadingAnchor, constant: 20),
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: titleLabelContainer.trailingAnchor, constant: -20),
 
             soundButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
             soundButton.trailingAnchor.constraint(equalTo: titleLabelContainer.trailingAnchor, constant: -20),
