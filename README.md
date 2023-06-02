@@ -13,10 +13,9 @@ Dictionary3 is a comprehensive iOS application designed to facilitate a dynamic 
 
 ## Screenshots![Simulator Screenshot - iPhone 14 Pro - 2023-06-02 at 17 04 41](https://github.com/bakiucann/BakiUcan_HW3/assets/113190194/3374a0a7-9543-4931-8f9c-493bed343fbf)
 
-![Simulator Screenshot - iPhone 14 Pro - 2023-06-02 at 17 04 41](https://github.com/bakiucann/BakiUcan_HW3/assets/113190194/bea060e7-7906-4c99-8f77-b9cd8065041b)
-![Simulator Screenshot - iPhone 14 Pro - 2023-06-02 at 17 19 05](https://github.com/bakiucann/BakiUcan_HW3/assets/113190194/1c6b74b3-136f-4513-b15a-ae49adde97cc)
-![Simulator Screenshot - iPhone 14 Pro - 2023-06-02 at 17 19 40](https://github.com/bakiucann/BakiUcan_HW3/assets/113190194/648f3ab2-9d42-49e0-8fa6-03e94531349b)
-
+![Simulator Screenshot - iPhone 14 Pro - 2023-06-02 at 17 04 41](https://github.com/bakiucann/BakiUcan_HW3/assets/113190194/f810e0b9-d271-42cb-8a6e-987ac962195b)
+![Simulator Screenshot - iPhone 14 Pro - 2023-06-02 at 17 19 05](https://github.com/bakiucann/BakiUcan_HW3/assets/113190194/299d6632-eeb3-4f7c-aab5-c8c52dc28079)
+![Simulator Screenshot - iPhone 14 Pro - 2023-06-02 at 17 19 40](https://github.com/bakiucann/BakiUcan_HW3/assets/113190194/0f8d56e0-a87b-4cf8-b274-91c9542a4db2)
 
 
 
