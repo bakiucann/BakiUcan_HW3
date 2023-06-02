@@ -10,26 +10,26 @@ import CoreData
 
 class SearchViewModel {
     private let apiService: APIService
-    private let searchManager: SearchManager
+    private let searchDataStorage: SearchDataStorage
 
-    init(apiService: APIService = APIService(), searchManager: SearchManager = SearchManager()) {
+    init(apiService: APIService = APIService(), searchDataStorage: SearchDataStorage = SearchDataStorage()) {
         self.apiService = apiService
-        self.searchManager = searchManager
+        self.searchDataStorage = searchDataStorage
     }
 
     func getRecentSearches() -> [String] {
-        return searchManager.getRecentSearches()
+        return searchDataStorage.getRecentSearches()
     }
 
     func addSearchTerm(_ term: String) {
-        searchManager.addSearchTerm(term)
+        searchDataStorage.saveSearchTerm(term)
     }
 
     func getSearchHistoryCount() -> Int {
-        return searchManager.getRecentSearches().count
+        return searchDataStorage.getRecentSearches().count
     }
 
     func getSearchTerm(at index: Int) -> String {
-        return searchManager.getRecentSearches()[index]
+        return searchDataStorage.getRecentSearches()[index]
     }
 }

@@ -15,7 +15,6 @@ class SearchViewController: UIViewController {
     private var searchButton: UIButton!
     private var recentSearchesTable: UITableView!
     private var viewModel: SearchViewModel!
-    private var searchManager: SearchManager!
     private var keyboardMonitor = KeyboardMonitor()
     private var searchButtonBottomConstraint: NSLayoutConstraint!
 
@@ -24,7 +23,7 @@ class SearchViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .white
 
-        searchManager = SearchManager()
+      viewModel = SearchViewModel()
 
         setupViews()
         layoutViews()
@@ -137,7 +136,7 @@ class SearchViewController: UIViewController {
             showAlert(message: "Please enter a valid search term")
             return
         }
-        searchManager.addSearchTerm(term)
+        viewModel.addSearchTerm(term)
         recentSearchesTable.reloadData()
 
         let detailVC = DetailViewController()
@@ -154,7 +153,7 @@ class SearchViewController: UIViewController {
 
 extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchManager.getRecentSearches().count
+        return viewModel.getRecentSearches().count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -171,14 +170,14 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
 
         cell.imageView?.image = searchIconView.image
         cell.accessoryView = arrowIconView
-        cell.textLabel?.text = searchManager.getRecentSearches()[indexPath.row]
+        cell.textLabel?.text = viewModel.getRecentSearches()[indexPath.row]
 
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = DetailViewController()
-        detailVC.searchTerm = searchManager.getRecentSearches()[indexPath.row]
+        detailVC.searchTerm = viewModel.getRecentSearches()[indexPath.row]
         self.navigationController?.pushViewController(detailVC, animated: true)
     }
 

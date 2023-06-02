@@ -6,45 +6,20 @@
 //
 
 import UIKit
-import CoreData
 
 class SearchManager {
+    private let searchDataStorage: SearchDataStorage
 
-
-    private let appDelegate: AppDelegate
-
-    init() {
-        appDelegate = UIApplication.shared.delegate as! AppDelegate
+    init(searchDataStorage: SearchDataStorage) {
+        self.searchDataStorage = searchDataStorage
     }
 
-  func addSearchTerm(_ term: String) {
-      let recentSearches = getRecentSearches()
-      if recentSearches.contains(term) {
-          print("The term '\(term)' is already exist in the recent searches.")
-      } else {
-          let context = appDelegate.persistentContainer.viewContext
-          let entity = NSEntityDescription.entity(forEntityName: "Search", in: context)!
-          let search = NSManagedObject(entity: entity, insertInto: context)
-          search.setValue(term, forKey: "term")
-          search.setValue(Date(), forKey: "date")
-          appDelegate.saveContext()
-      }
-  }
+    func addSearchTerm(_ term: String) {
+        searchDataStorage.saveSearchTerm(term)
+    }
 
-  func getRecentSearches() -> [String] {
-      let context = appDelegate.persistentContainer.viewContext
-      let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Search")
-      fetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
-      fetchRequest.fetchLimit = 5
-      do {
-          let result = try context.fetch(fetchRequest) as! [NSManagedObject]
-          let recentSearches = result.compactMap({ $0.value(forKey: "term") as? String })
-          return recentSearches
-      } catch {
-          print("Error fetching recent searches: \(error)")
-          return []
-      }
-  }
-
+    func getRecentSearches() -> [String] {
+        return searchDataStorage.getRecentSearches()
+    }
 }
 

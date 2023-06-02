@@ -18,7 +18,7 @@ class SynonymCell: UITableViewCell {
 
         titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 18)
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 16)
         titleLabel.text = "Synonyms"
         contentView.addSubview(titleLabel)
 
@@ -30,13 +30,13 @@ class SynonymCell: UITableViewCell {
         contentView.addSubview(synonymsStackView)
 
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
 
-            synonymsStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 25),
+            synonymsStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 15),
             synonymsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-            synonymsStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -25),
+            synonymsStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15),
         ])
     }
 
@@ -65,7 +65,7 @@ class SynonymCell: UITableViewCell {
 
             let containerView = UIView()
             containerView.translatesAutoresizingMaskIntoConstraints = false
-            containerView.widthAnchor.constraint(equalToConstant: 80).isActive = true
+            containerView.widthAnchor.constraint(equalToConstant: 90).isActive = true
             containerView.heightAnchor.constraint(equalToConstant: 45).isActive = true
 
             let label = UILabel()
@@ -73,6 +73,8 @@ class SynonymCell: UITableViewCell {
             label.layer.borderWidth = 0.3
             label.layer.borderColor = UIColor.gray.cgColor
             label.layer.cornerRadius = 18
+            label.adjustsFontSizeToFitWidth = true
+            label.minimumScaleFactor = 0.5
             label.textAlignment = .center
             label.clipsToBounds = true
             label.translatesAutoresizingMaskIntoConstraints = false
