@@ -8,20 +8,24 @@
 import UIKit
 
 class SynonymCell: UITableViewCell {
+    // MARK: - Properties
     static let reuseIdentifier = "SynonymCell"
 
     private var titleLabel: UILabel!
     private var synonymsStackView: UIStackView!
 
+    // MARK: - Initialization
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
+        // Title Label
         titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = UIFont.boldSystemFont(ofSize: 16)
         titleLabel.text = "Synonyms"
         contentView.addSubview(titleLabel)
 
+        // Synonyms Stack View
         synonymsStackView = UIStackView()
         synonymsStackView.translatesAutoresizingMaskIntoConstraints = false
         synonymsStackView.axis = .vertical
@@ -29,6 +33,7 @@ class SynonymCell: UITableViewCell {
         synonymsStackView.alignment = .leading
         contentView.addSubview(synonymsStackView)
 
+        // Constraints
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
@@ -44,16 +49,21 @@ class SynonymCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Configuration
     func configure(with synonyms: [String]) {
+        // Hide the title label if synonyms array is empty
         titleLabel.isHidden = synonyms.isEmpty
 
-        for arrangedSubview in synonymsStackView.arrangedSubviews {
-            synonymsStackView.removeArrangedSubview(arrangedSubview)
-            arrangedSubview.removeFromSuperview()
+        // Clear existing arranged subviews from the stack view
+        synonymsStackView.arrangedSubviews.forEach { subview in
+            synonymsStackView.removeArrangedSubview(subview)
+            subview.removeFromSuperview()
         }
 
+        // Add synonyms to the stack view
         var horizontalStackView: UIStackView? = nil
         for (index, synonym) in synonyms.enumerated() {
+            // Create a new horizontal stack view for every 4 synonyms
             if index % 4 == 0 {
                 horizontalStackView = UIStackView()
                 horizontalStackView?.translatesAutoresizingMaskIntoConstraints = false
@@ -63,11 +73,13 @@ class SynonymCell: UITableViewCell {
                 synonymsStackView.addArrangedSubview(horizontalStackView!)
             }
 
+            // Create a container view for each synonym label
             let containerView = UIView()
             containerView.translatesAutoresizingMaskIntoConstraints = false
             containerView.widthAnchor.constraint(equalToConstant: 90).isActive = true
             containerView.heightAnchor.constraint(equalToConstant: 45).isActive = true
 
+            // Synonym Label
             let label = UILabel()
             label.text = synonym
             label.layer.borderWidth = 0.3
@@ -79,7 +91,10 @@ class SynonymCell: UITableViewCell {
             label.clipsToBounds = true
             label.translatesAutoresizingMaskIntoConstraints = false
 
+            // Add label to the container view
             containerView.addSubview(label)
+
+            // Constraints for the label within the container view
             NSLayoutConstraint.activate([
                 label.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 5),
                 label.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -5),
@@ -87,6 +102,7 @@ class SynonymCell: UITableViewCell {
                 label.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -5)
             ])
 
+            // Add container view to the current horizontal stack view
             horizontalStackView?.addArrangedSubview(containerView)
         }
     }

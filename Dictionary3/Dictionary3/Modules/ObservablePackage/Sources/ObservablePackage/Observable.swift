@@ -8,6 +8,7 @@
 import Foundation
 
 public class Observable<T> {
+    // MARK: - Properties
     public var value: T? {
         didSet {
             listener?(value)
@@ -16,8 +17,10 @@ public class Observable<T> {
 
     public var listener: ((T?) -> Void)?
 
+    // MARK: - Initialization
     public init() {}
 
+    // MARK: - Binding
     public func bind(_ listener: @escaping (T?) -> Void) {
         listener(value)
         self.listener = listener

@@ -1,3 +1,4 @@
+//
 //  DetailViewModel.swift
 //  Dictionary3
 //
@@ -8,18 +9,21 @@ import Foundation
 import ObservablePackage
 
 class DetailViewModel {
+    // MARK: - Properties
     private let apiService: APIService
 
-    var meanings: Observable<[Meaning]> = Observable()
-    var phoneticText: Observable<String?> = Observable()
-    var synonyms: Observable<[String]> = Observable()
-    var phoneticAudioURLs: Observable<[String]> = Observable()
-    var isFiltering = false
+    var meanings: Observable<[Meaning]> = Observable() // Observable array of meanings
+    var phoneticText: Observable<String?> = Observable() // Observable phonetic text
+    var synonyms: Observable<[String]> = Observable() // Observable array of synonyms
+    var phoneticAudioURLs: Observable<[String]> = Observable() // Observable array of phonetic audio URLs
+    var isFiltering = false // Flag indicating whether filtering is applied or not
 
+    // MARK: - Initialization
     init(apiService: APIService = APIService()) {
         self.apiService = apiService
     }
 
+    // MARK: - Fetching Details
     func getDetails(for term: String) {
         apiService.fetchData(term: term, url: apiService.definitionURL, responseType: [DictionaryResponse].self) { [weak self] (result) in
             switch result {
@@ -34,6 +38,7 @@ class DetailViewModel {
         }
     }
 
+    // MARK: - Fetching Synonyms
     func getSynonyms(for term: String) {
         apiService.fetchData(term: term, url: apiService.synonymURL, responseType: [SynonymResponse].self) { [weak self] (result) in
             switch result {

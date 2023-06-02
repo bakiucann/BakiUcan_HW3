@@ -5,10 +5,10 @@
       location = "container:"
       name = "CoreData">
       <FileRef
-         location = "group:Search+CoreDataClass.swift">
+         location = "group:CoreData/Search+CoreDataClass.swift">
       </FileRef>
       <FileRef
-         location = "group:Search+CoreDataProperties.swift">
+         location = "group:CoreData/Search+CoreDataProperties.swift">
       </FileRef>
    </Group>
    <FileRef

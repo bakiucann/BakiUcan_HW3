@@ -6,6 +6,7 @@
 //
 
 struct SynonymResponse: Codable {
+  // MARK: - Properties
     let word: String
     let score: Int
 }

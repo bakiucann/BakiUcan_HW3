@@ -12,29 +12,41 @@ import Alertable
 
 class SearchViewController: UIViewController, Alertable {
 
+    // MARK: - Properties
+
+    // UI elements
     private var searchTextField: UITextField!
     private var searchButton: UIButton!
     private var recentSearchesTable: UITableView!
+
+    // ViewModel
     private var viewModel: SearchViewModel!
+
+    // Keyboard monitoring
     private var keyboardMonitor = KeyboardMonitor()
     private var searchButtonBottomConstraint: NSLayoutConstraint!
 
+    // MARK: - Lifecycle Methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
 
-      viewModel = SearchViewModel()
+        // Initialize the ViewModel
+        viewModel = SearchViewModel()
 
         setupViews()
         layoutViews()
         startMonitoringKeyboard()
 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleScreenTap))
-           self.view.addGestureRecognizer(tapGesture)
+        self.view.addGestureRecognizer(tapGesture)
     }
 
+    // MARK: - UI Setup
+
     private func setupViews() {
+        // Search Text Field
         searchTextField = UITextField()
         searchTextField.translatesAutoresizingMaskIntoConstraints = false
         searchTextField.placeholder = "Search..."
@@ -60,6 +72,7 @@ class SearchViewController: UIViewController, Alertable {
 
         self.view.addSubview(searchTextField)
 
+        // Search Button
         searchButton = UIButton()
         searchButton.translatesAutoresizingMaskIntoConstraints = false
         searchButton.setTitle("Search", for: .normal)
@@ -68,17 +81,17 @@ class SearchViewController: UIViewController, Alertable {
         searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
         self.view.addSubview(searchButton)
 
+        // Recent Searches Table
         recentSearchesTable = UITableView()
         recentSearchesTable.translatesAutoresizingMaskIntoConstraints = false
         recentSearchesTable.dataSource = self
         recentSearchesTable.delegate = self
         recentSearchesTable.separatorStyle = .none
         self.view.addSubview(recentSearchesTable)
-      
     }
 
     private func layoutViews() {
-      searchButtonBottomConstraint = searchButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        searchButtonBottomConstraint = searchButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
         NSLayoutConstraint.activate([
             searchTextField.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 20),
             searchTextField.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
@@ -100,59 +113,65 @@ class SearchViewController: UIViewController, Alertable {
         self.view.bringSubviewToFront(searchButton)
     }
 
-  private func startMonitoringKeyboard() {
-      NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-      NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-  }
+    // MARK: - Keyboard Handling
 
-  @objc private func keyboardWillShow(notification: NSNotification) {
-      if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-          let keyboardRectangle = keyboardFrame.cgRectValue
-          let keyboardHeight = keyboardRectangle.height
-          searchButtonBottomConstraint.constant = -keyboardHeight
-          UIView.animate(withDuration: 0.25) {
-              self.view.layoutIfNeeded()
-          }
-      }
-  }
+    private func startMonitoringKeyboard() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
 
-  @objc private func keyboardWillHide(notification: NSNotification) {
-      searchButtonBottomConstraint.constant = 0
-      UIView.animate(withDuration: 0.25) {
-          self.view.layoutIfNeeded()
-      }
-  }
+    @objc private func keyboardWillShow(notification: NSNotification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+            searchButtonBottomConstraint.constant = -keyboardHeight
+            UIView.animate(withDuration: 0.25) {
+                self.view.layoutIfNeeded()
+            }
+        }
+    }
 
+    @objc private func keyboardWillHide(notification: NSNotification) {
+        searchButtonBottomConstraint.constant = 0
+        UIView.animate(withDuration: 0.25) {
+            self.view.layoutIfNeeded()
+        }
+    }
 
-  @objc func handleScreenTap(sender: UITapGestureRecognizer) {
-      if sender.state == .ended {
-          view.endEditing(true)
-      }
-      sender.cancelsTouchesInView = false
-  }
+    // MARK: - Gesture Handling
 
+    @objc func handleScreenTap(sender: UITapGestureRecognizer) {
+        if sender.state == .ended {
+            view.endEditing(true)
+        }
+        sender.cancelsTouchesInView = false
+    }
 
-  @objc func searchButtonTapped() {
-      guard let term = searchTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !term.isEmpty, term.rangeOfCharacter(from: CharacterSet.decimalDigits) == nil else {
-          showAlert(message: "Please enter a valid search term")
-          return
-      }
-      viewModel.addSearchTerm(term)
-      recentSearchesTable.reloadData()
+    // MARK: - Button Actions
 
-      let detailVC = DetailViewController()
-      detailVC.searchTerm = term
-      self.navigationController?.pushViewController(detailVC, animated: true)
-  }
+    @objc func searchButtonTapped() {
+        guard let term = searchTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !term.isEmpty, term.rangeOfCharacter(from: CharacterSet.decimalDigits) == nil else {
+            showAlert(message: "Please enter a valid search term")
+            return
+        }
+        viewModel.addSearchTerm(term)
+        recentSearchesTable.reloadData()
 
-  deinit {
-          NotificationCenter.default.removeObserver(self)
-      }
+        let detailVC = DetailViewController()
+        detailVC.searchTerm = term
+        self.navigationController?.pushViewController(detailVC, animated: true)
+    }
 
+    // MARK: - Memory Management
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 }
 
 extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
+    // MARK: - Table View Data Source
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.getRecentSearches().count
     }
@@ -176,11 +195,15 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
 
+    // MARK: - Table View Delegate
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = DetailViewController()
         detailVC.searchTerm = viewModel.getRecentSearches()[indexPath.row]
         self.navigationController?.pushViewController(detailVC, animated: true)
     }
+
+    // MARK: - Table View Header
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()

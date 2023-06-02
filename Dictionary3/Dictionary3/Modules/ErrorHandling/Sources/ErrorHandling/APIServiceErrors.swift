@@ -8,6 +8,7 @@
 import Foundation
 
 public enum APIServiceError: Error {
+    // MARK: - Error Cases
     case invalidTerm
     case invalidURL
     case invalidData
@@ -15,21 +16,21 @@ public enum APIServiceError: Error {
     case parsingError(Error)
     case unknownError
 
+    // MARK: - Localized Description
     public var localizedDescription: String {
         switch self {
         case .invalidTerm:
-            return "Geçersiz terim."
+            return "Invalid term."
         case .invalidURL:
-            return "Geçersiz URL."
+            return "Invalid URL."
         case .invalidData:
-            return "Geçersiz veri."
+            return "Invalid data."
         case .networkError(let error):
-            return "Ağ hatası: \(error.localizedDescription)"
+            return "Network error: \(error.localizedDescription)"
         case .parsingError(let error):
-            return "Ayrıştırma hatası: \(error.localizedDescription)"
+            return "Parsing error: \(error.localizedDescription)"
         case .unknownError:
-            return "Bilinmeyen bir hata oluştu."
+            return "An unknown error occurred."
         }
     }
 }
-

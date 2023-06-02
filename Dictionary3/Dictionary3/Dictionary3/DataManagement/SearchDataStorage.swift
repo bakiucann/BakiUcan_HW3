@@ -9,17 +9,21 @@ import UIKit
 import CoreData
 
 protocol SearchDataStorageProtocol {
+    // MARK: - Methods
     func saveSearchTerm(_ term: String)
     func getRecentSearches() -> [String]
 }
 
 class SearchDataStorage: SearchDataStorageProtocol {
+    // MARK: - Properties
     private let appDelegate: AppDelegate
 
+    // MARK: - Initialization
     init() {
         appDelegate = UIApplication.shared.delegate as! AppDelegate
     }
 
+    // MARK: - Saving Search Term
     func saveSearchTerm(_ term: String) {
         let context = appDelegate.persistentContainer.viewContext
 
@@ -34,6 +38,7 @@ class SearchDataStorage: SearchDataStorageProtocol {
         }
     }
 
+    // MARK: - Retrieving Recent Searches
     func getRecentSearches() -> [String] {
         let context = appDelegate.persistentContainer.viewContext
         let fetchRequest: NSFetchRequest<Search> = Search.fetchRequest()

@@ -1,3 +1,4 @@
+//
 // DetailViewController.swift
 // Dictionary3
 //
@@ -8,22 +9,23 @@ import UIKit
 import AVFoundation
 
 class DetailViewController: UIViewController {
+    // MARK: - Properties
     var searchTerm: String!
-    private var detailTableView: UITableView!
-    private var titleLabel: UILabel!
-    private var phoneticLabel: UILabel!
-    private var soundButton: UIButton!
-    private var titleLabelContainer: UIView!
-    private var viewModel: DetailViewModel!
-    private var synonyms: [String] = []
-    private var meanings: [Meaning] = []
-    private var selectedPartsOfSpeech: Set<String> = []
-    private var buttonsStackView: UIStackView!
-    private var player: AVPlayer?
-    private var buttonsScrollView: UIScrollView!
-    private var clearButton: UIButton!
+    private var detailTableView: UITableView! // TableView for displaying details
+    private var titleLabel: UILabel! // Label for displaying the title
+    private var phoneticLabel: UILabel! // Label for displaying the phonetic information
+    private var soundButton: UIButton! // Button for playing the pronunciation sound
+    private var titleLabelContainer: UIView! // Container view for the title label and related elements
+    private var viewModel: DetailViewModel! // View model for fetching and managing data
+    private var synonyms: [String] = [] // Array to store synonyms
+    private var meanings: [Meaning] = [] // Array to store meanings
+    private var selectedPartsOfSpeech: Set<String> = [] // Set to store selected parts of speech
+    private var buttonsStackView: UIStackView! // Stack view for displaying part of speech buttons
+    private var player: AVPlayer? // AVPlayer for playing the pronunciation sound
+    private var buttonsScrollView: UIScrollView! // ScrollView for part of speech buttons
+    private var clearButton: UIButton! // Button for clearing the selected parts of speech
 
-  
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         assert(searchTerm != nil, "Search term must be set before presenting DetailViewController.")
@@ -35,27 +37,29 @@ class DetailViewController: UIViewController {
         self.view.backgroundColor = .white
         viewModel = DetailViewModel()
 
-        setupViews()
-        layoutViews()
+        setupViews() // Setting up the UI elements
+        layoutViews() // Laying out the UI elements
 
-        titleLabel.text = searchTerm
+        titleLabel.text = searchTerm // Setting the title label text
         detailTableView.register(SynonymCell.self, forCellReuseIdentifier: SynonymCell.reuseIdentifier)
 
-        viewModel.meanings.bind { [weak self] meanings in
+      // MARK: - Bindings
+
+        viewModel.meanings.bind { [weak self] meanings in // Binding the meanings data to update the UI
             DispatchQueue.main.async {
                 self?.meanings = meanings ?? []
                 self?.detailTableView.reloadData()
             }
         }
 
-        viewModel.synonyms.bind { [weak self] synonyms in
+        viewModel.synonyms.bind { [weak self] synonyms in // Binding the synonyms data to update the UI
             DispatchQueue.main.async {
                 self?.synonyms = synonyms ?? []
                 self?.detailTableView.reloadData()
             }
         }
 
-        viewModel.phoneticText.bind { [weak self] phoneticText in
+        viewModel.phoneticText.bind { [weak self] phoneticText in // Binding the phonetic text to update the UI
             DispatchQueue.main.async {
                 if let phoneticText = phoneticText {
                     self?.phoneticLabel.text = phoneticText
@@ -63,7 +67,7 @@ class DetailViewController: UIViewController {
             }
         }
 
-        viewModel.phoneticAudioURLs.bind { [weak self] audioURLs in
+        viewModel.phoneticAudioURLs.bind { [weak self] audioURLs in // Binding the phonetic audio URLs to update the UI
             DispatchQueue.main.async {
                 if let audioURLs = audioURLs, !audioURLs.isEmpty {
                     self?.soundButton.isHidden = false
@@ -73,7 +77,7 @@ class DetailViewController: UIViewController {
             }
         }
 
-        viewModel.meanings.bind { [weak self] meanings in
+        viewModel.meanings.bind { [weak self] meanings in // Binding the meanings data to update the UI
             DispatchQueue.main.async {
                 self?.meanings = meanings ?? []
                 self?.buttonsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
@@ -90,55 +94,56 @@ class DetailViewController: UIViewController {
             }
         }
 
-        viewModel.getDetails(for: searchTerm)
-        viewModel.getSynonyms(for: searchTerm)
+        viewModel.getDetails(for: searchTerm) // Fetching details for the search term
+        viewModel.getSynonyms(for: searchTerm) // Fetching synonyms for the search term
         clearButton.isHidden = true
 
     }
 
+    // MARK: - UI Setup
     private func setupViews() {
-        titleLabelContainer = UIView()
+        titleLabelContainer = UIView() // Creating the container view for the title label and related elements
         titleLabelContainer.translatesAutoresizingMaskIntoConstraints = false
         titleLabelContainer.backgroundColor = .systemGray6
         self.view.addSubview(titleLabelContainer)
 
-        titleLabel = UILabel()
+        titleLabel = UILabel() // Creating the title label
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.textColor = .black
         titleLabel.font = UIFont.boldSystemFont(ofSize: 36)
         titleLabel.numberOfLines = 0
         titleLabelContainer.addSubview(titleLabel)
 
-        phoneticLabel = UILabel()
+        phoneticLabel = UILabel() // Creating the phonetic label
         phoneticLabel.translatesAutoresizingMaskIntoConstraints = false
         phoneticLabel.textColor = .gray
         titleLabelContainer.addSubview(phoneticLabel)
 
-        soundButton = UIButton()
+        soundButton = UIButton() // Creating the sound button
         soundButton.translatesAutoresizingMaskIntoConstraints = false
-        soundButton.setImage(UIImage(named: "pronaunciation"), for: .normal)
+        soundButton.setImage(UIImage(named: "pronunciation"), for: .normal)
         soundButton.addTarget(self, action: #selector(soundButtonTapped), for: .touchUpInside)
         titleLabelContainer.addSubview(soundButton)
 
-        buttonsScrollView = UIScrollView()
+        buttonsScrollView = UIScrollView() // Creating the buttons scroll view
         buttonsScrollView.translatesAutoresizingMaskIntoConstraints = false
         titleLabelContainer.addSubview(buttonsScrollView)
 
-        buttonsStackView = UIStackView()
+        buttonsStackView = UIStackView() // Creating the buttons stack view
         buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
         buttonsStackView.axis = .horizontal
         buttonsStackView.distribution = .fillProportionally
         buttonsStackView.spacing = 10
         buttonsScrollView.addSubview(buttonsStackView)
 
-        clearButton = UIButton()
+        clearButton = UIButton() // Creating the clear button
         clearButton.translatesAutoresizingMaskIntoConstraints = false
         clearButton.setImage(UIImage(named: "xbutton"), for: .normal)
         clearButton.tintColor = .black
         clearButton.addTarget(self, action: #selector(clearButtonTapped), for: .touchUpInside)
         titleLabelContainer.addSubview(clearButton)
 
-        detailTableView = UITableView()
+        detailTableView = UITableView() // Creating the detail table view
         detailTableView.translatesAutoresizingMaskIntoConstraints = false
         detailTableView.separatorStyle = .none
         detailTableView.dataSource = self
@@ -146,8 +151,9 @@ class DetailViewController: UIViewController {
         self.view.addSubview(detailTableView)
     }
 
+    // MARK: - Button Creation
     private func createButton(withTitle title: String) -> UIButton {
-        let button = UIButton()
+        let button = UIButton() // Creating a button with the specified title and style
         let formattedTitle = title.prefix(1).capitalized + title.dropFirst()
         button.setTitle(formattedTitle, for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -160,24 +166,24 @@ class DetailViewController: UIViewController {
         return button
     }
 
+    // MARK: - Button Actions
+    @objc func partOfSpeechButtonTapped(_ button: UIButton) {
+        let partOfSpeech = button.titleLabel?.text?.lowercased() ?? ""
+        if selectedPartsOfSpeech.contains(partOfSpeech) {
+            selectedPartsOfSpeech.remove(partOfSpeech)
+            button.isSelected = false
+            button.layer.borderColor = UIColor.clear.cgColor
+        } else {
+            selectedPartsOfSpeech.insert(partOfSpeech)
+            button.isSelected = true
+            button.layer.borderColor = UIColor.systemIndigo.cgColor
+        }
+        viewModel.isFiltering = !selectedPartsOfSpeech.isEmpty
+        filterMeanings()
+        clearButton.isHidden = selectedPartsOfSpeech.isEmpty
+    }
 
-  @objc func partOfSpeechButtonTapped(_ button: UIButton) {
-      let partOfSpeech = button.titleLabel?.text?.lowercased() ?? ""
-      if selectedPartsOfSpeech.contains(partOfSpeech) {
-          selectedPartsOfSpeech.remove(partOfSpeech)
-          button.isSelected = false
-          button.layer.borderColor = UIColor.clear.cgColor
-      } else {
-          selectedPartsOfSpeech.insert(partOfSpeech)
-          button.isSelected = true
-          button.layer.borderColor = UIColor.systemIndigo.cgColor
-      }
-      viewModel.isFiltering = !selectedPartsOfSpeech.isEmpty
-      filterMeanings()
-      clearButton.isHidden = selectedPartsOfSpeech.isEmpty
-  }
-
-
+    // MARK: - Button Actions
     @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
@@ -193,29 +199,29 @@ class DetailViewController: UIViewController {
         player?.play()
     }
 
-  @objc func clearButtonTapped() {
-      selectedPartsOfSpeech.removeAll()
-      resetButtonSelection()
-      viewModel.isFiltering = false
-      viewModel.getDetails(for: searchTerm)
-      clearButton.isHidden = true
-  }
+    @objc func clearButtonTapped() {
+        selectedPartsOfSpeech.removeAll()
+        resetButtonSelection()
+        viewModel.isFiltering = false
+        viewModel.getDetails(for: searchTerm)
+        clearButton.isHidden = true
+    }
 
+    // MARK: - Filtering
+    private func filterMeanings() {
+        viewModel.meanings.bind { [weak self] meanings in
+            DispatchQueue.main.async {
+                if self?.viewModel.isFiltering == true {
+                    self?.meanings = meanings?.filter { self?.selectedPartsOfSpeech.contains($0.partOfSpeech.lowercased()) ?? false } ?? []
+                } else {
+                    self?.meanings = meanings ?? []
+                }
+                self?.detailTableView.reloadData()
+            }
+        }
+    }
 
-  private func filterMeanings() {
-      viewModel.meanings.bind { [weak self] meanings in
-          DispatchQueue.main.async {
-              if self?.viewModel.isFiltering == true {
-                  self?.meanings = meanings?.filter { self?.selectedPartsOfSpeech.contains($0.partOfSpeech.lowercased()) ?? false } ?? []
-              } else {
-                  self?.meanings = meanings ?? []
-              }
-              self?.detailTableView.reloadData()
-          }
-      }
-  }
-
-
+    // MARK: - Button Selection
     private func resetButtonSelection() {
         buttonsStackView.arrangedSubviews.forEach { (view) in
             if let button = view as? UIButton {
@@ -225,6 +231,7 @@ class DetailViewController: UIViewController {
         }
     }
 
+    // MARK: - Layout
     private func layoutViews() {
         NSLayoutConstraint.activate([
             titleLabelContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -267,6 +274,8 @@ class DetailViewController: UIViewController {
         ])
     }
 }
+
+// MARK: - UITableViewDataSource
 
 extension DetailViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
