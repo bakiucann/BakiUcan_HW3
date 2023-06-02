@@ -6,13 +6,12 @@
 //
 
 import Foundation
-import CoreData
 
 class SearchViewModel {
-    private let apiService: APIService
-    private let searchDataStorage: SearchDataStorage
+    private let apiService: APIServiceProtocol
+    private let searchDataStorage: SearchDataStorageProtocol
 
-    init(apiService: APIService = APIService(), searchDataStorage: SearchDataStorage = SearchDataStorage()) {
+    init(apiService: APIServiceProtocol = APIService(), searchDataStorage: SearchDataStorageProtocol = SearchDataStorage()) {
         self.apiService = apiService
         self.searchDataStorage = searchDataStorage
     }

@@ -7,10 +7,15 @@
 
 import UIKit
 
-class SearchManager {
-    private let searchDataStorage: SearchDataStorage
+protocol SearchManagerProtocol {
+    func addSearchTerm(_ term: String)
+    func getRecentSearches() -> [String]
+}
 
-    init(searchDataStorage: SearchDataStorage) {
+class SearchManager: SearchManagerProtocol {
+    private let searchDataStorage: SearchDataStorageProtocol
+
+    init(searchDataStorage: SearchDataStorageProtocol) {
         self.searchDataStorage = searchDataStorage
     }
 
@@ -22,4 +27,3 @@ class SearchManager {
         return searchDataStorage.getRecentSearches()
     }
 }
-

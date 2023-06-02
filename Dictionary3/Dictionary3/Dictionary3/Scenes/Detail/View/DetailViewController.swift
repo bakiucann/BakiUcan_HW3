@@ -17,13 +17,13 @@ class DetailViewController: UIViewController {
     private var viewModel: DetailViewModel!
     private var synonyms: [String] = []
     private var meanings: [Meaning] = []
+    private var selectedPartsOfSpeech: Set<String> = []
     private var buttonsStackView: UIStackView!
     private var player: AVPlayer?
     private var buttonsScrollView: UIScrollView!
     private var clearButton: UIButton!
-    private var selectedPartsOfSpeech: Set<String> = []
 
-
+  
     override func viewDidLoad() {
         super.viewDidLoad()
         assert(searchTerm != nil, "Search term must be set before presenting DetailViewController.")

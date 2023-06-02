@@ -8,7 +8,12 @@
 import UIKit
 import CoreData
 
-class SearchDataStorage {
+protocol SearchDataStorageProtocol {
+    func saveSearchTerm(_ term: String)
+    func getRecentSearches() -> [String]
+}
+
+class SearchDataStorage: SearchDataStorageProtocol {
     private let appDelegate: AppDelegate
 
     init() {
@@ -31,13 +36,13 @@ class SearchDataStorage {
 
     func getRecentSearches() -> [String] {
         let context = appDelegate.persistentContainer.viewContext
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Search")
+        let fetchRequest: NSFetchRequest<Search> = Search.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
         fetchRequest.fetchLimit = 5
 
         do {
-            let result = try context.fetch(fetchRequest) as! [NSManagedObject]
-            let recentSearches = result.compactMap({ $0.value(forKey: "term") as? String })
+            let result = try context.fetch(fetchRequest)
+            let recentSearches = result.compactMap({ $0.term })
             return recentSearches
         } catch {
             print("Error fetching recent searches: \(error)")
