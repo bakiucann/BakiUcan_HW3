@@ -11,11 +11,14 @@ Dictionary3 is a comprehensive iOS application designed to facilitate a dynamic 
 - **Search History:** Displays recent search history for quick reference.
 - **User-Friendly Interface:** Allows easy navigation and smooth user experience.
 
-## Screenshots
+## Screenshots![Simulator Screenshot - iPhone 14 Pro - 2023-06-02 at 17 04 41](https://github.com/bakiucann/BakiUcan_HW3/assets/113190194/3374a0a7-9543-4931-8f9c-493bed343fbf)
 
-![Screenshot 1](screenshots/screenshot1.png)
-![Screenshot 2](screenshots/screenshot2.png)
-![Screenshot 3](screenshots/screenshot3.png)
+![Simulator Screenshot - iPhone 14 Pro - 2023-06-02 at 17 04 41](https://github.com/bakiucann/BakiUcan_HW3/assets/113190194/bea060e7-7906-4c99-8f77-b9cd8065041b)
+![Simulator Screenshot - iPhone 14 Pro - 2023-06-02 at 17 19 05](https://github.com/bakiucann/BakiUcan_HW3/assets/113190194/1c6b74b3-136f-4513-b15a-ae49adde97cc)
+![Simulator Screenshot - iPhone 14 Pro - 2023-06-02 at 17 19 40](https://github.com/bakiucann/BakiUcan_HW3/assets/113190194/648f3ab2-9d42-49e0-8fa6-03e94531349b)
+
+
+
 
 ## Technologies Used
 
