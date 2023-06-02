@@ -8,8 +8,9 @@
 import UIKit
 import CoreData
 import KeyboardMonitor
+import Alertable
 
-class SearchViewController: UIViewController {
+class SearchViewController: UIViewController, Alertable {
 
     private var searchTextField: UITextField!
     private var searchButton: UIButton!
@@ -131,18 +132,18 @@ class SearchViewController: UIViewController {
   }
 
 
-    @objc func searchButtonTapped() {
-        guard let term = searchTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !term.isEmpty, term.rangeOfCharacter(from: CharacterSet.decimalDigits) == nil else {
-            showAlert(message: "Please enter a valid search term")
-            return
-        }
-        viewModel.addSearchTerm(term)
-        recentSearchesTable.reloadData()
+  @objc func searchButtonTapped() {
+      guard let term = searchTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !term.isEmpty, term.rangeOfCharacter(from: CharacterSet.decimalDigits) == nil else {
+          showAlert(message: "Please enter a valid search term")
+          return
+      }
+      viewModel.addSearchTerm(term)
+      recentSearchesTable.reloadData()
 
-        let detailVC = DetailViewController()
-        detailVC.searchTerm = term
-        self.navigationController?.pushViewController(detailVC, animated: true)
-    }
+      let detailVC = DetailViewController()
+      detailVC.searchTerm = term
+      self.navigationController?.pushViewController(detailVC, animated: true)
+  }
 
   deinit {
           NotificationCenter.default.removeObserver(self)
